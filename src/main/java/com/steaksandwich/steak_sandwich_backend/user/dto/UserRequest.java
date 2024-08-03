@@ -6,6 +6,8 @@ public class UserRequest {
     private String email;
     private String password;
 
+    public UserRequest() {}
+
     public String getUsername() {
         return username;
     }

@@ -6,19 +6,20 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ManyToMany(mappedBy = "users")
@@ -27,19 +28,21 @@ public class User {
     @OneToMany(mappedBy = "creator")
     private List<League> createdLeagues;
 
-    @Column(nullable = false)
+    @Column(name = "points", nullable = false)
     private Integer points;
 
     @Column(name = "favorite_team_id")
     private Integer favoriteTeamId;
 
-    public User(String username, String email, String password, Integer favoriteTeamId) {
+    public User(String username, String email, String password) {
       this.username = username;
       this.password = password;
       this.email = email;
       this.points = 0;
       this.favoriteTeamId = null;
     }
+
+    public User() {}
 
     public Long getId() {
       return id;

@@ -10,6 +10,25 @@ public class UserResponse {
     private int points;
 
     public UserResponse(User user) {
-        this.id = user.getId()
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.points = user.getPoints();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getPoints() {
+        return points;
     }
 }
