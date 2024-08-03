@@ -41,6 +41,10 @@ public class User {
       this.favoriteTeamId = null;
     }
 
+    public Long getId() {
+      return id;
+    }
+
     public String getUsername() {
       return username;
     }
