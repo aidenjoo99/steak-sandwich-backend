@@ -17,14 +17,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "league",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "league_id")
-    )
+    @ManyToMany(mappedBy = "users")
     private List<League> leagues;
 
+    @OneToMany(mappedBy = "creator")
+    private List<League> createdLeagues;
+
+    @Column(nullable = false)
     private Integer points;
 
     @Column(name = "favorite_team_id")
