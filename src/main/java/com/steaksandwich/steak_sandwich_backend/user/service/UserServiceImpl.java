@@ -1,5 +1,8 @@
 package com.steaksandwich.steak_sandwich_backend.user.service;
 
-public class UserServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserServiceImpl implements UserService {
   
 }
