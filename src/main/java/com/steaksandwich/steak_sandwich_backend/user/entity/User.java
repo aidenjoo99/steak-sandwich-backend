@@ -22,6 +22,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "role")
+    private String role;
+
     @ManyToMany(mappedBy = "users")
     private List<League> leagues;
 
@@ -34,10 +37,11 @@ public class User {
     @Column(name = "favorite_team_id")
     private Integer favoriteTeamId;
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, String role) {
       this.username = username;
       this.password = password;
       this.email = email;
+      this.role = role;
       this.points = 0;
       this.favoriteTeamId = null;
     }
@@ -58,6 +62,10 @@ public class User {
 
     public String getPassword() {
       return password;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     public Integer getPoints() {

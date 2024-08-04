@@ -9,11 +9,14 @@ public class UserResponse {
     private String password;
     private int points;
 
+    private String role;
+
     public UserResponse(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.points = user.getPoints();
+        this.role = user.getRole();
     }
 
     public Long getId() {
@@ -30,5 +33,9 @@ public class UserResponse {
 
     public int getPoints() {
         return points;
+    }
+
+    public String getRole() {
+        return role;
     }
 }
