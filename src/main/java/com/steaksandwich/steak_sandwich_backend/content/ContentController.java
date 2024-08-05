@@ -1,4 +1,4 @@
-package com.steaksandwich.steak_sandwich_backend.content.controller;
+package com.steaksandwich.steak_sandwich_backend.content;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +19,11 @@ public class ContentController {
     @GetMapping("/user/home")
     public String handleUserHome() {
         return "home_user";
+    }
+
+    @GetMapping("/login")
+    public String handleLogin() {
+        return "custom_login";
     }
 
 }

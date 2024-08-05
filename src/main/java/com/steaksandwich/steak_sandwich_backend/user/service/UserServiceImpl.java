@@ -1,5 +1,6 @@
 package com.steaksandwich.steak_sandwich_backend.user.service;
 
+import com.steaksandwich.steak_sandwich_backend.exception.UsernameAlreadyExistsException;
 import com.steaksandwich.steak_sandwich_backend.user.repository.UserRepository;
 
 import java.util.List;
@@ -31,11 +32,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public List<UserResponse> getUsers() {
         return userRepository.findAll().stream()
-                .map(user -> new UserResponse(user))
+                .map(UserResponse::new)
                 .collect(Collectors.toList());
     }
 
     public UserResponse createUser(UserRequest request) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new UsernameAlreadyExistsException("The username " + request.getUsername() + " already exists");
+        }
+
         User user = new User(
                 request.getUsername(),
                 request.getEmail(),

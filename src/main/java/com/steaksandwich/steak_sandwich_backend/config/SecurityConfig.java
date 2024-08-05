@@ -1,5 +1,6 @@
 package com.steaksandwich.steak_sandwich_backend.config;
 
+import com.steaksandwich.steak_sandwich_backend.config.handler.AuthenticationSuccessHandler;
 import com.steaksandwich.steak_sandwich_backend.user.service.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,18 @@ public class SecurityConfig {
                     registry.requestMatchers("user/**").hasRole("USER");
                     registry.anyRequest().authenticated();
                 })
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .formLogin(httpSecurityFormLoginConfigurer -> {
+                    httpSecurityFormLoginConfigurer
+                            .loginPage("/login")
+                            .loginProcessingUrl("/login")
+                            .successHandler(new AuthenticationSuccessHandler())
+                            .failureUrl("/login?error=true")
+                            .permitAll();
+                })
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout=true")
+                        .permitAll()
+                )
                 .build();
     }
 
