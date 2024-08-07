@@ -18,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/register")
     public List<UserResponse> getUsers() {
         return userService.getUsers();
     }
