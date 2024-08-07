@@ -9,4 +9,6 @@ import java.util.List;
 public interface UserService {
     List<UserResponse> getUsers();
     UserResponse createUser(UserRequest request);
+
+    String confirmUser(String token);
 }
