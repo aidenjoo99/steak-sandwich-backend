@@ -1,9 +1,11 @@
 package com.steaksandwich.steak_sandwich_backend.user.entity;
 
 import com.steaksandwich.steak_sandwich_backend.league.entity.League;
+import com.steaksandwich.steak_sandwich_backend.session.entity.Session;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -25,6 +27,12 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "confirmation_token")
+    private String confirmationToken;
+
+    @Column(name = "isEnabled")
+    private boolean isEnabled;
+
     @ManyToMany(mappedBy = "users")
     private List<League> leagues;
 
@@ -37,11 +45,16 @@ public class User {
     @Column(name = "favorite_team_id")
     private Integer favoriteTeamId;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Session session;
+
     public User(String username, String email, String password, String role) {
       this.username = username;
       this.password = password;
       this.email = email;
       this.role = role;
+      this.confirmationToken = UUID.randomUUID().toString();
+      this.isEnabled = false;
       this.points = 0;
       this.favoriteTeamId = null;
     }
@@ -68,11 +81,31 @@ public class User {
         return role;
     }
 
+    public String getConfirmationToken() {
+        return confirmationToken;
+    }
+
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
     public Integer getPoints() {
       return points;
     }
 
     public Integer getFavoriteTeamId() {
       return favoriteTeamId;
+    }
+
+    public Session getSession() {
+      return session;
     }
 }

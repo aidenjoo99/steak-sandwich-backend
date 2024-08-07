@@ -18,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
+    @GetMapping("/aideng")
     public List<UserResponse> getUsers() {
         return userService.getUsers();
     }
@@ -26,5 +26,10 @@ public class UserController {
     @PostMapping("/register")
     public UserResponse createUser(@RequestBody UserRequest request) {
         return userService.createUser(request);
+    }
+
+    @GetMapping("/confirm")
+    public String confirmUser(@RequestParam String token) {
+        return userService.confirmUser(token);
     }
 }
