@@ -1,9 +1,8 @@
 package com.steaksandwich.steak_sandwich_backend.user.service;
 
-import com.steaksandwich.steak_sandwich_backend.exception.EmailAlreadyInUseException;
-import com.steaksandwich.steak_sandwich_backend.exception.UsernameAlreadyExistsException;
 import com.steaksandwich.steak_sandwich_backend.user.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,18 +41,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public UserResponse createUser(UserRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new UsernameAlreadyExistsException("The username " + request.getUsername() + " already exists");
+            return new UserResponse(false, "The username " + request.getUsername() + " already exists");
         }
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new EmailAlreadyInUseException("The email " + request.getEmail() + " is already in use");
+            return new UserResponse(false, "The email " + request.getEmail() + " is already in use");
+        }
+
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            return new UserResponse(false, "Passwords do not match");
         }
 
         User user = new User(
                 request.getUsername(),
                 request.getEmail(),
-                passwordEncoder.encode(request.getPassword()),
-                request.getRole()
+                passwordEncoder.encode(request.getPassword())
         );
 
         String confirmationUrl = "http://localhost:8080/users/confirm?token=" + user.getConfirmationToken();
@@ -69,20 +71,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         User savedUser = userRepository.save(user);
-        return new UserResponse(savedUser);
+        return new UserResponse(savedUser, true, "Registration successful! Please confirm your email.");
     }
 
     @Override
-    public String confirmUser(String token) {
+    public boolean confirmUser(String token) {
         if (userRepository.findByConfirmationToken(token).isPresent()) {
             User user = userRepository.findByConfirmationToken(token).get();
-            user.setEnabled(true);
-            user.setConfirmationToken(null);
-            userRepository.save(user);
-            return "Email confirmed. You can now log in.";
-        } else {
-            return "Invalid Token";
+            if (user.getTokenExpiryDate().isAfter(LocalDateTime.now())) {
+                user.setEnabled(true);
+                user.setConfirmationToken(null);
+                userRepository.save(user);
+                return true;
+            }
         }
+        return false;
     }
 
     @Override

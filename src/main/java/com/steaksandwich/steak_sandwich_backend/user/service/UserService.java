@@ -11,5 +11,5 @@ public interface UserService {
     List<UserResponse> getUsers();
     UserResponse createUser(UserRequest request);
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
-    String confirmUser(String token);
+    boolean confirmUser(String token);
 }
