@@ -3,6 +3,7 @@ package com.steaksandwich.steak_sandwich_backend.user.controller;
 import com.steaksandwich.steak_sandwich_backend.user.dto.UserRequest;
 import com.steaksandwich.steak_sandwich_backend.user.dto.UserResponse;
 import com.steaksandwich.steak_sandwich_backend.user.service.UserService;
+import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public UserResponse createUser(@RequestBody UserRequest request) {
-        return userService.createUser(request);
+    public UserResponse registerUser(@ModelAttribute UserRequest userRequest) {
+        return userService.createUser(userRequest);
     }
 
     @GetMapping("/confirm")
