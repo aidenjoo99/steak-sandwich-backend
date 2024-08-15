@@ -1,7 +1,6 @@
 package com.steaksandwich.steak_sandwich_backend.user.entity;
 
 import com.steaksandwich.steak_sandwich_backend.league.entity.League;
-import com.steaksandwich.steak_sandwich_backend.session.entity.Session;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -44,9 +43,6 @@ public class User {
 
     @Column(name = "favorite_team_id")
     private Integer favoriteTeamId;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Session session;
 
     public User(String username, String email, String password, String role) {
       this.username = username;
@@ -103,9 +99,5 @@ public class User {
 
     public Integer getFavoriteTeamId() {
       return favoriteTeamId;
-    }
-
-    public Session getSession() {
-      return session;
     }
 }
