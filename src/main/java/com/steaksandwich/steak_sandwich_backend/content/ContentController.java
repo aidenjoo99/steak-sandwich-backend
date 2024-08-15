@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,7 +43,12 @@ public class ContentController {
     public String handleLogin() {
         return "custom_login";
     }
-
+    
+    @GetMapping("/register")
+    public String handleRegister() {
+        return "register";
+    }
+    
     @PostMapping("/authenticate")
     public String authenticateToken(@RequestBody LoginForm user) {
         Authentication authentication = authenticationManager.authenticate(
@@ -55,5 +61,4 @@ public class ContentController {
             throw new UsernameNotFoundException("Invalid credentials.");
         }
     }
-
 }
