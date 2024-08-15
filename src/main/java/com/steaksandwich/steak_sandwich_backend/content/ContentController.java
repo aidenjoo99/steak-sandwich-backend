@@ -8,12 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import com.steaksandwich.steak_sandwich_backend.user.entity.User;
 import com.steaksandwich.steak_sandwich_backend.user.service.UserService;
 import com.steaksandwich.steak_sandwich_backend.session.service.SessionService;
 import com.steaksandwich.steak_sandwich_backend.exception.UsernameNotFoundException;
 import com.steaksandwich.steak_sandwich_backend.session.entity.LoginForm;
-import java.util.Optional;
 
 @Controller
 public class ContentController {
