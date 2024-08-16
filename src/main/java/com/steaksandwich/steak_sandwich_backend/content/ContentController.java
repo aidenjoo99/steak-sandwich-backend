@@ -55,7 +55,7 @@ public class ContentController {
         return (isValid) ? "confirm" : "fail";
     }
     
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public String authenticateToken(@RequestBody LoginForm user) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
