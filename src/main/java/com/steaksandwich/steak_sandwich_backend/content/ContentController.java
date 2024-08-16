@@ -1,6 +1,5 @@
 package com.steaksandwich.steak_sandwich_backend.content;
 
-import com.steaksandwich.steak_sandwich_backend.user.dto.UserRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
