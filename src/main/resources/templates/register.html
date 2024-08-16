@@ -1,29 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Registration Form</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
-            width: 100%;
-            max-width: 400px;
-            margin: 50px auto;
             background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
         }
         h2 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px;
         }
         .form-group {
             margin-bottom: 15px;
@@ -41,9 +43,8 @@
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 16px;
-            margin-bottom: 10px;
         }
-        input[type="submit"] {
+        button[type="submit"] {
             width: 100%;
             padding: 12px;
             background-color: #5cb85c;
@@ -53,72 +54,103 @@
             font-size: 16px;
             cursor: pointer;
         }
-        input[type="submit"]:hover {
+        button[type="submit"]:hover {
             background-color: #4cae4c;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 16px;
         }
         .error {
             color: red;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 10px;
-            display: none;
         }
         .success {
             color: green;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-<h1>Register</h1>
-<form id="registrationForm" action="/users/register" method="post" onsubmit="return validateForm()">
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username" required>
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password" required>
-    </div>
-    <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
-    </div>
+<div class="container">
+    <h2>Create Account</h2>
+    <form id="registrationForm" method="post">
+        <div class="form-group">
+            <label for="username">Username (lowercase & numbers only)</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" pattern="[a-z0-9]+" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+        </div>
 
-    <!-- Error message if passwords don't match or other error occurs -->
-    <p id="passwordError" class="error">Passwords do not match</p>
-
-    <input type="submit" value="Register">
-</form>
-<p th:if="${error}" th:text="${error}"></p>
+        <button type="submit">Register</button>
+    </form>
+    <div id="message" class="message"></div>
+</div>
 
 <script>
-    function validateForm() {
-        var password = document.getElementById("password").value;
-        var confirmPassword = document.getElementById("confirmPassword").value;
-        var errorElement = document.getElementById("passwordError");
-        var successElement = document.getElementById("successMessage");
+    document.getElementById('registrationForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
 
-        // Hide any previous success message
-        successElement.style.display = "none";
+        const registerButton = document.querySelector('button[type="submit"]');
 
-        if (password !== confirmPassword) {
-            // Show the error message
-            errorElement.style.display = "block";
-            return false; // Prevent form submission
+        // Disable the register button
+        registerButton.disabled = true;
+        registerButton.innerHTML = 'Processing...'; // Optionally, change the text to indicate the ongoing process
+
+        // Get form data
+        const formData = {
+            username: document.getElementById('username').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            confirmPassword: document.getElementById('confirmPassword').value
+        };
+
+        // Validate password matching
+        if (formData.password !== formData.confirmPassword) {
+            displayMessage("Passwords do not match", false);
+            registerButton.disabled = false;  // Re-enable the button if validation fails
+            registerButton.innerHTML = 'Register';
+            return;
         }
 
-        // Hide the error message if everything is fine
-        errorElement.style.display = "none";
-        return true; // Allow form submission
+        // Send POST request to the server
+        fetch('/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Display success or error message based on response
+                displayMessage(data.message, data.success);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                displayMessage("An error occurred. Please try again.", false);
+            })
+            .finally(() => {
+                // Re-enable the register button regardless of success or failure
+                registerButton.disabled = false;
+                registerButton.innerHTML = 'Register';
+            });
+    });
+
+    // Function to display the message on the screen
+    function displayMessage(message, isSuccess) {
+        const messageDiv = document.getElementById('message');
+        messageDiv.innerHTML = message;
+        messageDiv.className = isSuccess ? 'message success' : 'message error';
     }
 </script>
-
 </body>
 </html>

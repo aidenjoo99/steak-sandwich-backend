@@ -1,5 +1,6 @@
 package com.steaksandwich.steak_sandwich_backend.content;
 
+import com.steaksandwich.steak_sandwich_backend.user.dto.UserRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +13,7 @@ import com.steaksandwich.steak_sandwich_backend.user.service.UserService;
 import com.steaksandwich.steak_sandwich_backend.session.service.SessionService;
 import com.steaksandwich.steak_sandwich_backend.exception.UsernameNotFoundException;
 import com.steaksandwich.steak_sandwich_backend.session.entity.LoginForm;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ContentController {
@@ -42,10 +44,16 @@ public class ContentController {
     public String handleLogin() {
         return "custom_login";
     }
-    
+
     @GetMapping("/register")
-    public String handleRegister() {
+    public String handleRegistration() {
         return "register";
+    }
+
+    @GetMapping("confirmation-success")
+    public String handleConfirmationSuccess(@RequestParam(value = "continue", required = false) String continueParam) {
+        boolean isValid = userService.confirmUser(continueParam);
+        return (isValid) ? "confirm" : "fail";
     }
     
     @PostMapping("/authenticate")

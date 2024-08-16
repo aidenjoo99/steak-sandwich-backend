@@ -3,6 +3,7 @@ package com.steaksandwich.steak_sandwich_backend.user.entity;
 import com.steaksandwich.steak_sandwich_backend.league.entity.League;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +30,9 @@ public class User {
     @Column(name = "confirmation_token")
     private String confirmationToken;
 
+    @Column(name = "token-expiration-date")
+    private LocalDateTime tokenExpiryDate;
+
     @Column(name = "isEnabled")
     private boolean isEnabled;
 
@@ -44,12 +48,13 @@ public class User {
     @Column(name = "favorite_team_id")
     private Integer favoriteTeamId;
 
-    public User(String username, String email, String password, String role) {
+    public User(String username, String email, String password) {
       this.username = username;
       this.password = password;
       this.email = email;
-      this.role = role;
+      this.role = "USER";
       this.confirmationToken = UUID.randomUUID().toString();
+      this.tokenExpiryDate = LocalDateTime.now().plusHours(24);
       this.isEnabled = false;
       this.points = 0;
       this.favoriteTeamId = null;
@@ -67,6 +72,10 @@ public class User {
 
     public String getEmail() {
       return email;
+    }
+
+    public LocalDateTime getTokenExpiryDate() {
+        return tokenExpiryDate;
     }
 
     public String getPassword() {

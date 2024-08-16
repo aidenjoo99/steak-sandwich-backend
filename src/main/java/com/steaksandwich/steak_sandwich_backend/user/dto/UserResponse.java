@@ -6,36 +6,64 @@ public class UserResponse {
 
     private Long id;
     private String username;
-    private String password;
-    private int points;
+    private String email;
+    private boolean success;
+    private String message;
 
-    private String role;
 
-    public UserResponse(User user) {
+    public UserResponse(User user, boolean success, String message) {
         this.id = user.getId();
         this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.points = user.getPoints();
-        this.role = user.getRole();
+        this.email = user.getEmail();
+        this.success = success;
+        this.message = message;
+    }
+
+    public UserResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+    }
+
+    public UserResponse(User user) {
     }
 
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
 
-    public String getPassword() {
-        return password;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public int getPoints() {
-        return points;
+    public String getEmail() {
+        return email;
     }
 
-    public String getRole() {
-        return role;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
